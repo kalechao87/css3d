@@ -1,0 +1,128 @@
+@charset "UTF-8";
+@import "compass/css3";
+/**
+ *
+ * Video Main
+ *
+ */
+$bg: #000;
+$main-blue: #000228;
+// Z-Indexes
+// -------------------------------
+$z-index-placehold: -1;
+$z-index-img: 1;
+$z-index-switch: 2;
+$z-index-progress: 9;
+$z-index-tag: 9;
+$z-index-border: 10;
+$z-index-notice: 99;
+$z-index-tooltips: 99;
+$z-index-head: 100;
+$z-index-poptips: 999;
+$z-index-overlay: 9999;
+/*=====  End of video control类  ======*/
+body {
+  position: relative;
+  overflow: hidden;
+  background: $bg;
+}
+
+/*----------- helper -----------*/
+.page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: $bg;
+  background-size: cover;
+  overflow: hidden;
+}
+
+.ab-element {
+  position: absolute;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+.hvcenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  @include transform(translate3d(-50%, -50%, 0));
+}
+
+.hcenter {
+  position: absolute;
+  left: 50%;
+  @include transform(translate3d(-50%, 0, 0));
+}
+
+.vcenter {
+  position: absolute;
+  top: 50%;
+  @include transform(translate3d(0, -50%, 0));
+}
+
+#common-bg {
+  @include bgi('front.jpg');
+}
+
+$main-color: rgba(0, 0, 0, 0.5);
+$opaque-color: opacify($main-color, 0.2);
+$transparent-color: transparentize($main-color, 0.3);
+
+.view__3d {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  perspective: 300;
+  color: $transparent-color;
+}
+
+@keyframes rotateY {
+  0% {
+    transform: rotateY(0deg);
+  }
+
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
+.opening__logo {
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  margin: {
+    top: -15%;
+  }
+  width: 30%;
+
+  img {
+    width: 100%;
+    display: block;
+    // animation: 2s rotateY linear infinite;
+  }
+}
+
+#main,
+#tz,
+#pano-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+}
+
+#pano-bg span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 129px;
+  height: 1170px;
+  margin: -585px 0 0 -64.5px;
+  backface-visibility: hidden;
+}

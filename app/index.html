@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta name="format-detection" content="telephone=no">
+  <title>css 3d</title>
+  <!--build:css css/main.css -->
+  <link rel="stylesheet" href="css/main.css">
+  <!-- endbuild -->
+  <!-- 以下代码默认设计稿尺寸为 640 * 1134 -->
+  <script>
+    function initView() {
+      var detectBrowser = function (name) {
+        if (navigator.userAgent.toLowerCase().indexOf(name) > -1) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      var width = parseInt(window.screen.width);
+      var scale = width / 640; // 根据设计稿尺寸进行相应修改: 640=>?
+      var userScalable = 'no';
+      if (detectBrowser('qq/')) userScalable = 'yes';
+      document.getElementById('viewport').setAttribute('content',
+        'target-densitydpi=device-dpi,width=640, user-scalable=' + userScalable + ', initial-scale=' + scale); // 这里页别忘了改:640=>?
+    }
+    initView();
+    window.onresize = initView;
+  </script>
+</head>
+
+<body>
+  <div class="page" id="common-bg"></div>
+  <div class="view__3d">
+    <div class="opening opening__step1">
+      <div class="opening__logo">
+        <img src="images/load/logo.png">
+      </div>
+    </div>
+
+    <div class="invisible" id="main">
+      <div id="tz">
+        <div id="pano-bg"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S view set -->
+  <div class="camera">
+    <div class="space">
+      <div class="element"></div>
+    </div>
+  </div>
+  <!-- E view set -->
+
+
+  <!-- build:js js/vendor.min.js -->
+  <script src="js/vendor/jquery-3.2.1.min.js"></script>
+  <script src="js/vendor/TweenMax.min.js" charset="utf-8"></script>
+  <script src="js/vendor/touch.min.js" charset="utf-8"></script>
+  <script src="js/vendor/m.Tween.js"></script>
+  <!-- endbuild -->
+  <!--build:js js/main.min.js -->
+  <script src="js/main.js" charset="utf-8"></script>
+  <!-- endbuild -->
+</body>
+
+</html>
