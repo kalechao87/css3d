@@ -108,6 +108,34 @@ $transparent-color: transparentize($main-color, 0.3);
   }
 }
 
+.opening-transition,
+.opening-transition__frags {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+}
+
+.opening-transition__frags span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  background: center center no-repeat;
+  background-size: contain;
+}
+
+.opening-transition__img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -35px 0 0 -98.5px;
+  width: 197px;
+  height: 70px;
+}
+
 #main,
 #tz,
 #pano-bg {

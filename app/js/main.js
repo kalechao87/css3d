@@ -19,6 +19,17 @@ disableBodyMove()
 
 var imgData = {
   logo: ['load/logo2.png', 'load/logo3.png', 'load/logo4.png'],
+  logoIco: [
+    'load/loadIco1.png',
+    'load/loadIco2.png',
+    'load/loadIco3.png',
+    'load/loadIco4.png',
+    'load/loadIco5.png',
+    'load/loadIco6.png',
+    'load/loadIco7.png',
+    'load/loadIco8.png',
+    'load/loadIco9.png'
+  ],
   bg: [
     'bg/1.png',
     'bg/2.png',
@@ -96,8 +107,10 @@ TweenMax.fromTo(
   '.opening__logo',
   2,
   { rotationY: 0 },
-  { rotationY: 360, repeat: 1, ease: Power0.easeNone, onComplete: startOpening }
+  { rotationY: 360, repeat: -1, ease: Power0.easeNone }
 )
+
+setTimeout(startOpening, 2000)
 
 function startOpening () {
   var view = document.querySelector('.view__3d')
@@ -122,6 +135,48 @@ function startOpening () {
   )
 
   TweenMax.set([step2, step3], { z: -1000, autoAlpha: 0 })
+
+  var step4 = document.createElement('div')
+  var step4Frags = document.createElement('div')
+  var step4Img = new Image()
+  // 设定碎片个数
+  var fragsLength = 27
+  step4.classList.add('opening-transition', 'opening__step4')
+  step4Frags.classList.add('opening-transition__frags')
+  step4Img.classList.add('opening-transition__img')
+  step4Img.src = 'images/' + imgData.logo[2]
+  for (var i = 0; i < fragsLength; i++) {
+    var span = document.createElement('span')
+    var xR = 20 + Math.round(Math.random() * 240) // 圆柱碎片的x半径
+    var xDeg = Math.round(Math.random() * 360)
+    var yR = 10 + Math.round(Math.random() * 240) // 圆柱碎片的Y半径
+    var yDeg = Math.round(Math.random() * 360)
+    // css(span, 'rotateY', xDeg)
+    // css(span, 'translateZ', xR)
+    // css(span, 'rotateX', yDeg)
+    // css(span, 'translateY', yR)
+
+    TweenMax.set(span, {
+      rotationX: xDeg,
+      rotationY: yDeg,
+      y: yR,
+      z: xR,
+      transformOrigin: 0 + 'px ' + -xR + 'px ' + -xR + 'px'
+    })
+    span.style.backgroundImage = 'url(images/' + imgData.logoIco[i % 9] + ')'
+    step4Frags.appendChild(span)
+  }
+
+  step4.appendChild(step4Frags)
+  step4.appendChild(step4Img)
+  view.appendChild(step4)
+  TweenMax.set(step4, { z: -2000, scale: 0 })
+  TweenMax.fromTo(
+    ['.opening-transition__frags'],
+    2,
+    { rotationY: 0 },
+    { rotationY: 360, ease: Power0.easeNone, repeat: -1 }
+  )
 
   var openingAN = new TimelineMax()
   openingAN
@@ -148,13 +203,27 @@ function startOpening () {
     .to('.opening__step3', 0.3, { z: 0, ease: Power1.easeInOut })
     .to(
       '.opening__step3',
-      1,
+      2,
     {
-      z: -1000,
+      z: -2000,
       onComplete: function () {
           view.removeChild(step3)
         }
     },
       '+=1'
+    )
+    .to('.opening__step4', 0.5, { z: 0, scale: 1, ease: Power3.easeOut })
+    .to(
+      '.opening__step4',
+      3,
+    {
+      z: -2000,
+      scale: 0.2,
+      ease: Power0.easeNone,
+      onComplete: function () {
+          view.removeChild(step4)
+        }
+    },
+      '+=0.5'
     )
 }
