@@ -9,8 +9,8 @@
  */
 
 // 禁止页面滚动
-function disableBodyMove () {
-  $('body').on('touchmove', function (e) {
+function disableBodyMove() {
+  $('body').on('touchmove', function(e) {
     e.preventDefault()
   }) // 禁止页面滚动
 }
@@ -30,6 +30,7 @@ var imgData = {
     'load/loadIco8.png',
     'load/loadIco9.png'
   ],
+  cloud: ['bg/cloud1.png', 'bg/cloud2.png', 'bg/cloud3.png'],
   bg: [
     'bg/1.png',
     'bg/2.png',
@@ -76,10 +77,10 @@ for (var i = 0; i < 20; i++) {
   })
   panoBg.appendChild(span)
   startDeg -= sliceDeg
-  console.log('startDeg is: ' + startDeg)
+  // console.log('startDeg is: ' + startDeg)
 }
 
-;(function () {
+;(function() {
   // setPerc()
 })()
 
@@ -88,11 +89,11 @@ for (var i = 0; i < 20; i++) {
   1.固定视野的角度大小，根据这个角度的大小，计算出景深
   2. 保持我和景物之间的距离不变
 */
-function setPerc () {
+function setPerc() {
   resteview()
   window.onresize = resteview
 
-  function resteview () {
+  function resteview() {
     var view = document.querySelector('.view__3d')
     var main = document.querySelector('#main')
     var deg = 52.5
@@ -112,7 +113,7 @@ TweenMax.fromTo(
 
 setTimeout(startOpening, 2000)
 
-function startOpening () {
+function startOpening() {
   var view = document.querySelector('.view__3d')
   var step1 = document.querySelector('.opening__step1')
   var step2 = document.createElement('div')
@@ -136,6 +137,45 @@ function startOpening () {
 
   TweenMax.set([step2, step3], { z: -1000, autoAlpha: 0 })
 
+  var openingAN = new TimelineMax()
+  openingAN
+    .to('.opening__step1', 1, {
+      autoAlpha: 0,
+      onComplete: function() {
+        view.removeChild(step1)
+      }
+    })
+    .set(step2, { autoAlpha: 1 })
+    .to('.opening__step2', 0.3, { z: 0, ease: Power1.easeInOut })
+    .to(
+      '.opening__step2',
+      1,
+      {
+        z: -1000,
+        onComplete: function() {
+          view.removeChild(step2)
+        }
+      },
+      '+=2'
+    )
+    .set('.opening__step3', { autoAlpha: 1 })
+    .to('.opening__step3', 0.3, { z: 0, ease: Power1.easeInOut })
+    .to(
+      '.opening__step3',
+      2,
+      {
+        z: -2000,
+        onComplete: function() {
+          view.removeChild(step3)
+          openingTransition()
+        }
+      },
+      '+=1'
+    )
+}
+
+function openingTransition() {
+  var view = document.querySelector('.view__3d')
   var step4 = document.createElement('div')
   var step4Frags = document.createElement('div')
   var step4Img = new Image()
@@ -178,52 +218,55 @@ function startOpening () {
     { rotationY: 360, ease: Power0.easeNone, repeat: -1 }
   )
 
-  var openingAN = new TimelineMax()
-  openingAN
-    .to('.opening__step1', 1, {
-      autoAlpha: 0,
-      onComplete: function () {
-        view.removeChild(step1)
-      }
-    })
-    .set(step2, { autoAlpha: 1 })
-    .to('.opening__step2', 0.3, { z: 0, ease: Power1.easeInOut })
-    .to(
-      '.opening__step2',
-      1,
-    {
-      z: -1000,
-      onComplete: function () {
-          view.removeChild(step2)
-        }
-    },
-      '+=2'
-    )
-    .set('.opening__step3', { autoAlpha: 1 })
-    .to('.opening__step3', 0.3, { z: 0, ease: Power1.easeInOut })
-    .to(
-      '.opening__step3',
-      2,
-    {
-      z: -2000,
-      onComplete: function () {
-          view.removeChild(step3)
-        }
-    },
-      '+=1'
-    )
-    .to('.opening__step4', 0.5, { z: 0, scale: 1, ease: Power3.easeOut })
-    .to(
-      '.opening__step4',
-      3,
+  var otAN = new TimelineMax()
+  otAN.to('.opening__step4', 0.5, { z: 0, scale: 1, ease: Power3.easeOut }).to(
+    '.opening__step4',
+    2,
     {
       z: -2000,
       scale: 0.2,
       ease: Power0.easeNone,
-      onComplete: function () {
-          view.removeChild(step4)
-        }
+      onComplete: function() {
+        view.removeChild(step4)
+        initMainScene()
+      }
     },
-      '+=0.5'
-    )
+    '+=0.5'
+  )
+}
+
+function initMainScene() {
+  createClouds()
+}
+
+function createClouds() {
+  var clouds = document.querySelector('.scene-clouds')
+  for (var i = 0; i < 9; i++) {
+    var span = document.createElement('span')
+    span.style.backgroundImage = 'url(images/' + imgData.cloud[i % 3] + ')'
+    var R = 200 + Math.random() * 150 // 设置随机半径
+    var deg = 360 / 9 * i // 圆柱各个角度
+    var x = Math.sin(deg * Math.PI / 180) * R // sin 求得X
+    var z = Math.cos(deg * Math.PI / 180) * R // cos 求得z
+    var y = (Math.random() - 0.5) * 200 // 上下分布
+
+    TweenMax.set(span, { x: x, y: y, z: z })
+
+    clouds.appendChild(span)
+  }
+
+  TweenMax.to('.scene-clouds', 3.5, {
+    rotationY: 540,
+    ease: Power1.easeIn,
+    onUpdate: function() {
+      // console.log(clouds._gsTransform)
+      var deg = -clouds._gsTransform.rotationY
+      for (var i = 0; i < clouds.children.length; i++) {
+        TweenMax.set(clouds.children[i], { rotationY: deg })
+      }
+    },
+    onComplete: function() {
+      clouds.parentNode.removeChild(clouds)
+    }
+  })
 }
